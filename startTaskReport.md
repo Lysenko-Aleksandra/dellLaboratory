@@ -64,10 +64,10 @@ git clone https://github.com/dell/csi-baremetal-operator
 git clone https://github.com/dell/csi-baremetal
 ```
 
-Далее можно смело следовать гайду https://github.com/dell/csi-baremetal/blob/master/docs/CONTRIBUTING.md
+**Далее можно смело следовать гайду https://github.com/dell/csi-baremetal/blob/master/docs/CONTRIBUTING.md**
 
 Ниже преведена та же последовательность действий с переводом комментариев, а так же некоторым исправлением
-### Сборка ###
+# Сборка #
 ## Установка некоторый полезных далее переменных ##
 ```
 export REGISTRY=<логин_вашего_аккаунта_на_dockerhub>
