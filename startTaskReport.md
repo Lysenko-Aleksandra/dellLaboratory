@@ -6,9 +6,9 @@
 
 Прежде чем приступить к непосредственной установке необходимо скачать go,  docker и kind, а также завест аккаунт на dockerhub.
 
-## Скачивание go##
+## Скачивание go ##
 # переходим в домашнюю директорию
-cd ~
+ «cd ~»
 # качаем тар-архив
 # !!!!версия не ниже 1.16
 curl -O https://dl.google.com/go/go1.18.linux-amd64.tar.gz
@@ -17,12 +17,12 @@ sudo tar -xvf go1.18.linux-amd64.tar.gz -C /usr/local
 # go должна располагаться внутри директории /usr/local. Рекурсивно изменяем владельца и группу этой директории на root
 sudo chown -R root:root /usr/local/go
 
-### Установка переменных окружения###
+### Установка переменных окружения ###
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin
 
-## Скачивание doсker##
+## Скачивание doсker ##
 # обновляем apt и качаем пакеты
 sudo apt-get update
 sudo apt-get install \
@@ -43,11 +43,11 @@ sudo docker run hello-world
 # позволяем не-root пользователям пользователя командами docker
 sudo chmod 666 /var/run/docker.sock
 
-## Скачивание kind##
+## Скачивание kind ##
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.12.0/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /<полная директория хранения kind>/kind
-### Установка переменной окружения###
+### Установка переменной окружения ###
 export PATH=$PATH:<полная директория хранения kind>
 
 ## Скачивание источников csi-baremetal и csi-baremetal-operator ##
@@ -58,7 +58,7 @@ git clone https://github.com/dell/csi-baremetal
 
 Ниже преведена та же последовательность действий с переводом комментариев, а так же некоторым исправлением
 ### Сборка ###
-## Установка некоторый полезных далее переменных##
+## Установка некоторый полезных далее переменных ##
 export REGISTRY=<логин_вашего_аккаунта_на_dockerhub>
 export CSI_BAREMETAL_DIR=<полная_директория_csi_baremetal>
 export CSI_BAREMETAL_OPERATOR_DIR=<полная_директория_csi_baremetal_operator>
@@ -105,7 +105,7 @@ make test
 # Собираем docker images
 make docker-build REGISTRY=${REGISTRY}
 
-## Подготавливаем kind кластер##
+## Подготавливаем kind кластер ##
 cd ${CSI_BAREMETAL_DIR}
 
 ## Если вы проверяли установку kind путём создания кластера, его необходимо удалить
