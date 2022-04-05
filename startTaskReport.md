@@ -7,8 +7,9 @@
 Прежде чем приступить к непосредственной установке необходимо скачать go,  docker и kind, а также завест аккаунт на dockerhub.
 
 ## Скачивание go ##
+```
 # переходим в домашнюю директорию
- «cd ~»
+ cd ~
 # качаем тар-архив
 # !!!!версия не ниже 1.16
 curl -O https://dl.google.com/go/go1.18.linux-amd64.tar.gz
@@ -16,13 +17,17 @@ curl -O https://dl.google.com/go/go1.18.linux-amd64.tar.gz
 sudo tar -xvf go1.18.linux-amd64.tar.gz -C /usr/local
 # go должна располагаться внутри директории /usr/local. Рекурсивно изменяем владельца и группу этой директории на root
 sudo chown -R root:root /usr/local/go
+```
 
 ### Установка переменных окружения ###
+```
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin
+```
 
 ## Скачивание doсker ##
+```
 # обновляем apt и качаем пакеты
 sudo apt-get update
 sudo apt-get install \
@@ -42,30 +47,38 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker run hello-world
 # позволяем не-root пользователям пользователя командами docker
 sudo chmod 666 /var/run/docker.sock
+```
 
 ## Скачивание kind ##
+```
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.12.0/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /<полная директория хранения kind>/kind
 ### Установка переменной окружения ###
 export PATH=$PATH:<полная директория хранения kind>
+```
 
 ## Скачивание источников csi-baremetal и csi-baremetal-operator ##
+```
 git clone https://github.com/dell/csi-baremetal-operator
 git clone https://github.com/dell/csi-baremetal
+```
 
 Далее можно смело следовать гайду https://github.com/dell/csi-baremetal/blob/master/docs/CONTRIBUTING.md
 
 Ниже преведена та же последовательность действий с переводом комментариев, а так же некоторым исправлением
 ### Сборка ###
 ## Установка некоторый полезных далее переменных ##
+```
 export REGISTRY=<логин_вашего_аккаунта_на_dockerhub>
 export CSI_BAREMETAL_DIR=<полная_директория_csi_baremetal>
 export CSI_BAREMETAL_OPERATOR_DIR=<полная_директория_csi_baremetal_operator>
+```
 
 ## Сборка csi-baremetal ##
+```
 cd ${CSI_BAREMETAL_DIR}
-export CSI_VERSION=`make version`
+export CSI_VERSION=`make version
 
 # Получаем зависимости
 make dependency
@@ -94,8 +107,9 @@ make DRIVE_MANAGER_TYPE=loopbackmgr build-drivemgr
 make download-grpc-health-probe
 make images REGISTRY=${REGISTRY}
 make DRIVE_MANAGER_TYPE=loopbackmgr image-drivemgr REGISTRY=${REGISTRY}
-
+```
 ## Сборка csi-baremetal-operator ##
+```
 cd ${CSI_BAREMETAL_OPERATOR_DIR}
 export CSI_OPERATOR_VERSION=`make version`
 
@@ -104,11 +118,12 @@ make test
 
 # Собираем docker images
 make docker-build REGISTRY=${REGISTRY}
-
+```
 ## Подготавливаем kind кластер ##
+```
 cd ${CSI_BAREMETAL_DIR}
 
-## Если вы проверяли установку kind путём создания кластера, его необходимо удалить
+# Если вы проверяли установку kind путём создания кластера, его необходимо удалить
 kind delete claster
 
 # Собираем кастомный бинарный файл kind 
@@ -125,7 +140,9 @@ make deps-docker-tag
 make kind-tag-images TAG=${CSI_VERSION} REGISTRY=${REGISTRY}
 make kind-load-images TAG=${CSI_VERSION} REGISTRY=${REGISTRY}
 make load-operator-image OPERATOR_VERSION=${CSI_OPERATOR_VERSION} REGISTRY=${REGISTRY}
-Install on kind
+```
+### Установка на kind ###
+```
 cd ${CSI_BAREMETAL_OPERATOR_DIR}
 
 # Устанавливаем оператор
@@ -143,9 +160,11 @@ helm install csi-baremetal ./charts/csi-baremetal-deployment/ \
     --set driver.log.level=debug \
     --set scheduler.log.level=debug \
     --set nodeController.log.level=debug
+ ```
 
 ## Валидация ##
-В файле tests/app/nginx.yaml меняем количество реплик на 2 или 3
+!!!!В файле tests/app/nginx.yaml меняем количество реплик на 2 или 3
+```
 # Запускаем тестирующее приложение
 cd ${CSI_BAREMETAL_DIR}
 kubectl apply -f tests/app/nginx.yaml
@@ -155,3 +174,4 @@ kubectl get pods
 
 # И все PVCs  Bound
 kubectl get pvc
+```
